@@ -26,11 +26,11 @@ jobs:
         fetch-depth: 0
     - name: "Login to docker registry"
       run: |
-        SUB_PROJECT_PATH="app/assets/javascripts"
         DOCKER_LOGIN_PASSWORD=$(curl --fail -s -H "Content-Type: application/json" -H "Authorization: Token $PRIVADO_API_TOKEN" -H "idt: $PRIVADO_API_TOKEN" -H "data-url: /ce/integrations/customers/$PRIVADO_API_ID/docker-registry-token" $PRIVADO_API_HOST/ce/integrations/customers/$PRIVADO_API_ID/docker-registry-token?ci=true)
         docker login --username AWS --password $DOCKER_LOGIN_PASSWORD  $PRIVADO_DOCKER_IMAGE
     - name: Run Privado Scanner
       run: |
+        SUB_PROJECT_PATH="app/assets/javascripts"
         env > $GITHUB_WORKSPACE/$SUB_PROJECT_PATH/.privado.env
         docker run -t -v $GITHUB_WORKSPACE/$SUB_PROJECT_PATH:/privado --env-file $GITHUB_WORKSPACE/$SUB_PROJECT_PATH/.privado.env --privileged --pull=always $PRIVADO_DOCKER_IMAGE
 
